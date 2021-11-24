@@ -3,73 +3,79 @@ from .models import Image
 import absoluteuri
 
 
-class ImageSerializer(serializers.ModelSerializer):
+class ImageBasicSerializer(serializers.ModelSerializer):
     default = "http://127.0.0.1:5000/api/media/"
 
-    account_type = serializers.SerializerMethodField()
+    image_200_url = serializers.SerializerMethodField()
+    def get_image_200_url(self, Image):
+        link = absoluteuri.build_absolute_uri('media/' + str(Image.image_200))
+        if link != "http://127.0.0.1:5000/api/media/":
+            return link
 
-    def get_account_type(self, obj):
-        account_type = self.context.get("account_type")
-        return account_type
+    class Meta:
+        model = Image
+        exclude = ('image_original', 'image_200', 'image_400')
 
-    if str(account_type) == "Basic":
-        image_200_url = serializers.SerializerMethodField()
-
-        def get_image_200_url(self, Image):
-            link = absoluteuri.build_absolute_uri('media/' + str(Image.image_200))
-            if link != "http://127.0.0.1:5000/api/media/":
-                return link
-
-        class Meta:
-            model = Image
-            exclude = ('image_original','image_200','image_400')
+    def create(self, validated_data):
+        return Image.objects.create(**validated_data)
 
 
-    elif str(account_type) == "Premium":
-        image_200_url = serializers.SerializerMethodField()
-
-        def get_image_200_url(self, Image):
-            link = absoluteuri.build_absolute_uri('media/' + str(Image.image_200))
-            if link != "http://127.0.0.1:5000/api/media/":
-                return link
-
-        image_400_url = serializers.SerializerMethodField()
-
-        def get_image_400_url(self, Image):
-            link = absoluteuri.build_absolute_uri('media/' + str(Image.image_400))
-            if link != "http://127.0.0.1:5000/api/media/":
-                return link
-
-        class Meta:
-            model = Image
-            exclude = ('image_original','image_200','image_400')
 
 
-    else:
+class ImagePremiumSerializer(serializers.ModelSerializer):
+    default = "http://127.0.0.1:5000/api/media/"
 
-        image_200_url = serializers.SerializerMethodField()
+    image_200_url = serializers.SerializerMethodField()
+    def get_image_200_url(self, Image):
+        link = absoluteuri.build_absolute_uri('media/' + str(Image.image_200))
+        if link != "http://127.0.0.1:5000/api/media/":
+            return link
 
-        def get_image_200_url(self, Image):
-            link = absoluteuri.build_absolute_uri('media/' + str(Image.image_200))
-            if link != "http://127.0.0.1:5000/api/media/":
-                return link
-        image_400_url = serializers.SerializerMethodField()
+    image_400_url = serializers.SerializerMethodField()
+    def get_image_400_url(self, Image):
+        link = absoluteuri.build_absolute_uri('media/' + str(Image.image_400))
+        if link != "http://127.0.0.1:5000/api/media/":
+            return link
 
-        def get_image_400_url(self, Image):
-            link = absoluteuri.build_absolute_uri('media/' + str(Image.image_400))
-            if link != "http://127.0.0.1:5000/api/media/":
-                return link
+    class Meta:
+        model = Image
+        exclude = ('image_original', 'image_200', 'image_400')
 
-        image_original_url = serializers.SerializerMethodField()
 
-        def get_image_original_url(self, Image):
-            link = absoluteuri.build_absolute_uri('media/' + str(Image.image_original))
-            if link != "http://127.0.0.1:5000/api/media/":
-                return link
+    def create(self, validated_data):
+        return Image.objects.create(**validated_data)
 
-        class Meta:
-            model = Image
-            exclude = ('image_original','image_200','image_400')
+
+
+
+class ImageEnterpriseSerializer(serializers.ModelSerializer):
+    default = "http://127.0.0.1:5000/api/media/"
+
+    image_200_url = serializers.SerializerMethodField()
+    def get_image_200_url(self, Image):
+        link = absoluteuri.build_absolute_uri('media/' + str(Image.image_200))
+        if link != "http://127.0.0.1:5000/api/media/":
+            return link
+
+
+    image_400_url = serializers.SerializerMethodField()
+    def get_image_400_url(self, Image):
+        link = absoluteuri.build_absolute_uri('media/' + str(Image.image_400))
+        if link != "http://127.0.0.1:5000/api/media/":
+            return link
+
+
+    image_original_url = serializers.SerializerMethodField()
+    def get_image_original_url(self, Image):
+        link = absoluteuri.build_absolute_uri('media/' + str(Image.image_original))
+        if link != "http://127.0.0.1:5000/api/media/":
+            return link
+
+
+    class Meta:
+        model = Image
+        exclude = ('image_original', 'image_200', 'image_400')
+
 
     def create(self, validated_data):
         return Image.objects.create(**validated_data)

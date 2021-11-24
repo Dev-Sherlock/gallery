@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 
-from .serializers import ImageSerializer
+from .serializers import *
 from .models import Image
 
 
@@ -18,11 +18,16 @@ class ImageListView(APIView):
         user = self.request.user
         images = Image.objects.filter(user__user=user)
         user= UserProfile.objects.get(user=self.request.user)
-        serializer = ImageSerializer(images, many=True, context={'account_type': user.type})
+        if user.type=='Basic':
+            serializer = ImageBasicSerializer(images, many=True)
+        elif user.type=='Premium':
+            serializer = ImagePremiumSerializer(images, many=True)
+        else:
+            serializer = ImageEnterpriseSerializer(images, many=True)
         return Response(data=serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request):
-        serializer = ImageSerializer(data=request.data, context={"request": request})
+        serializer = ImageBasicSerializer(data=request.data, context={"request": request})
         if serializer.is_valid():
             serializer.save(
                 user=UserProfile.objects.get(user=request.user.username),
