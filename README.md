@@ -53,3 +53,9 @@ PASSWORD: your_password1
 5.  In a User field, select user1. In a Type field, select the type of account you prefer.
 
 6.  Click Save.
+
+
+## Important:
+
+Before following setting it up, docker and docker-compose must be installed.
+
