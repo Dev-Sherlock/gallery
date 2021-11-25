@@ -14,7 +14,7 @@ class ImageBasicSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Image
-        exclude = ('image_original', 'image_200', 'image_400')
+        fields = ('__all__')
 
     def create(self, validated_data):
         return Image.objects.create(**validated_data)
@@ -39,7 +39,7 @@ class ImagePremiumSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Image
-        exclude = ('image_original', 'image_200', 'image_400')
+        fields = ('__all__')
 
 
     def create(self, validated_data):
@@ -74,7 +74,7 @@ class ImageEnterpriseSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Image
-        exclude = ('image_original', 'image_200', 'image_400')
+        fields = ('__all__')
 
 
     def create(self, validated_data):
