@@ -27,10 +27,17 @@ class ImageListView(APIView):
         return Response(data=serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request):
-        serializer = ImageBasicSerializer(data=request.data, context={"request": request})
+        print(request.data)
+        user= UserProfile.objects.get(user=self.request.user)
+        if user.type=='Basic':
+            serializer = ImageBasicSerializer(data=request.data, context={"request": request})
+        elif user.type=='Premium':
+            serializer = ImagePremiumSerializer(data=request.data,context={"request": request})
+        else:
+            serializer = ImageEnterpriseSerializer(data=request.data, context={"request": request})
         if serializer.is_valid():
             serializer.save(
-                user=UserProfile.objects.get(user=request.user.username),
+                user=UserProfile.objects.get(user=request.user),
                 image_original=request.data.get('image'),
                 image_200=request.data.get('image'),
                 image_400=request.data.get('image'),
